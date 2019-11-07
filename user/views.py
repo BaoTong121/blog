@@ -16,10 +16,12 @@ def gen_token(user_id):
 def reg(request: HttpRequest):
     try:
         payload = simplejson.loads(request.body)
+        print(payload)
         email = payload['email']
         name = payload['name']
         password = payload['password']
         qs = User.objects.filter(email=email)
+        print(qs)
         if qs:
             return HttpResponseBadRequest()
         else:
@@ -60,7 +62,7 @@ def login(request: HttpRequest):
 
 def authenticate(view):
     def wrapper(request: HttpRequest):
-        token = request.META.get('HTTP_JWK')
+        token = request.META.get('HTTP_JWT')
         if not token:
             return HttpResponse(status=401)
         try:
